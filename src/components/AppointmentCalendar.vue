@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue"
 import { groupTimeSlotsByDate } from "@/utils/group"
-import { getDayMonthString, getDayOfWeekString, getTime24String } from "@/utils/date"
+import { getDayMonthString, getDayOfWeekString, getTime24String, isFutureDate, isEqualDate } from "@/utils/date"
 import type { TimeSlot } from "@/types/Appointment"
 import BaseButton from "@/components/BaseButton.vue"
 
 type AppointmentCalendarProps = {
   startDate: Date
   endDate: Date
-  slots: TimeSlot[]
+  slots?: TimeSlot[]
+  selectedSlotDate?: Date
   showLoader?: boolean
   slotsPreviewCount?: number
 }
@@ -28,12 +29,17 @@ const {
   startDate,
   endDate,
   slots,
-  slotsPreviewCount = 7
+  slotsPreviewCount = 7,
+  selectedSlotDate
 } = defineProps<AppointmentCalendarProps>()
 
-const emit = defineEmits(['goPrev', 'goNext'])
+const emit = defineEmits(['goPrev', 'goNext', 'selectSlot'])
 
 const dates = computed(() => {
+  if (!slots) {
+    return []
+  }
+
   const datesRec = groupTimeSlotsByDate({ startDate, endDate, slots })
 
   return Object.entries(datesRec).map(([dateString, slots]) => {
@@ -76,16 +82,21 @@ const displayedDates = computed(() => {
   }))
 })
 
-const canGoBack = computed(() => {
-  return startDate > new Date() // going back to the past is not allowed
-})
+// going back to the past is not allowed
+const canGoPrev = computed(() => isFutureDate(startDate))
 
-const goPrev = () => {
+function goPrev() {
   emit('goPrev')
 }
 
-const goNext = () => {
+function goNext () {
   emit('goNext')
+}
+
+function selectSlot (slot: TimeSlot) {
+  if (slot.startDate !== selectedSlotDate) {
+    emit('selectSlot', slot)
+  }
 }
 
 </script>
@@ -97,7 +108,7 @@ const goNext = () => {
         aria-label="Show earlier dates"
         default-class="align-self-start rounded-circle"
         variant="primary-light"
-        :disabled="!canGoBack || showLoader"
+        :disabled="!canGoPrev || showLoader"
         @click="goPrev"
       >
         <v-icon icon="$prev" class="ma-1" />
@@ -116,9 +127,10 @@ const goNext = () => {
             <BaseButton
               :aria-label="`On ${date.dateString} at ${slot.timeString}`"
               class="w-100"
-              variant="primary-light"
+              :variant="selectedSlotDate && isEqualDate(selectedSlotDate, slot.startDate) ? 'primary' : 'primary-light'"
               :class="{ 'text-decoration-line-through': slot.taken }"
               :disabled="slot.taken"
+              @click="selectSlot(slot)"
             >
               {{ slot.timeString }}
             </BaseButton>
@@ -164,6 +176,6 @@ ul {
 }
 
 .placeholder {
-  min-height: 400px;
+  min-height: 320px;
 }
 </style>
