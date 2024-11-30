@@ -23,7 +23,7 @@ type AppointmentArg = {
 const API_URL = "https://draliatest.azurewebsites.net/api"
 
 export async function fetchWeeklySlots(monday: Date): Promise<TimeSlot[]> {
-  const url = `${API_URL}/availability/GetWeeklySlots/${format(monday, 'yyyyMMdd')}`
+  const url = `${API_URL}/availability/GetWeeklySlots/${format(monday, "yyyyMMdd")}`
   const res = await fetch(url)
   const slots = await res.json() as TimeSlotResponse
 
@@ -38,13 +38,13 @@ export async function saveAppointment(appointment: Appointment): Promise<boolean
   const url = `${API_URL}/availability/BookSlot`
 
   const res = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      Start: format(appointment.startDate, 'yyyy-MM-dd HH:mm:ss'),
-      End: format(appointment.endDate, 'yyyy-MM-dd HH:mm:ss'),
+      Start: format(appointment.startDate, "yyyy-MM-dd HH:mm:ss"),
+      End: format(appointment.endDate, "yyyy-MM-dd HH:mm:ss"),
       Comments: appointment.comments,
       Patient: {
         Name: appointment.patient.name,

@@ -53,10 +53,10 @@ describe("components/AppointmentCalendar", () => {
     const busySlot = wrapper.find("[aria-label='On 9 Dec at 10:40']")
 
     expect(availableSlot.exists()).toBe(true)
-    expect(availableSlot.attributes('disabled')).toBeUndefined()
+    expect(availableSlot.attributes("disabled")).toBeUndefined()
 
     expect(busySlot.exists()).toBe(true)
-    expect(busySlot.attributes('disabled')).not.toBeUndefined()
+    expect(busySlot.attributes("disabled")).not.toBeUndefined()
   })
 
   it("emits event when the user navigates to other dates", async () => {

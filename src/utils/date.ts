@@ -8,19 +8,19 @@ export function getFullDateString(date: Date) {
 }
 
 export function getShortDateString(date: Date) {
-  return format(date, 'yyyy-MM-dd')
+  return format(date, "yyyy-MM-dd")
 }
 
 export function getDayOfWeekString(date: Date | string) {
-  return format(date, 'EEE')
+  return format(date, "EEE")
 }
 
 export function getDayMonthString(date: Date | string) {
-  return format(date, 'd MMM')
+  return format(date, "d MMM")
 }
 
 export function getTime24String(date: Date) {
-  return format(date, 'kk:mm')
+  return format(date, "kk:mm")
 }
 
 export function getDatesRange(startDate: Date, endDate: Date) {

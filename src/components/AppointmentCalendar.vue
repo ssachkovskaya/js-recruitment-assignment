@@ -33,7 +33,7 @@ const {
   selectedSlotDate
 } = defineProps<AppointmentCalendarProps>()
 
-const emit = defineEmits(['goPrev', 'goNext', 'selectSlot'])
+const emit = defineEmits(["goPrev", "goNext", "selectSlot"])
 
 const dates = computed(() => {
   if (!slots) {
@@ -86,16 +86,16 @@ const displayedDates = computed(() => {
 const canGoPrev = computed(() => isFutureDate(startDate))
 
 function goPrev() {
-  emit('goPrev')
+  emit("goPrev")
 }
 
 function goNext () {
-  emit('goNext')
+  emit("goNext")
 }
 
 function selectSlot (slot: TimeSlot) {
   if (slot.startDate !== selectedSlotDate) {
-    emit('selectSlot', slot)
+    emit("selectSlot", slot)
   }
 }
 
@@ -159,7 +159,7 @@ function selectSlot (slot: TimeSlot) {
         variant="primary-link"
         @click="showAllSlots = !showAllSlots"
       >
-        {{ showAllSlots ? 'Less' : 'Show more hours' }}
+        {{ showAllSlots ? "Less" : "Show more hours" }}
         <v-icon :icon="showAllSlots ? '$collapse' : '$expand'" />
       </BaseButton>
     </div>
