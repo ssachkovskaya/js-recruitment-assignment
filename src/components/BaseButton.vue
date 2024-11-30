@@ -1,18 +1,26 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed } from "vue"
 
-const { variant = "primary" } = defineProps<{
-  variant: "primary"
-}>()
+interface BaseButtonProps {
+  variant?: "primary" | "primary-light" | "primary-link"
+  defaultClass?: string
+}
 
-const classObject = ref({
-  primary: variant === "primary"
-})
+const {
+  variant = "primary",
+  defaultClass = "rounded py-1 px-2 font-weight-medium"
+} = defineProps<BaseButtonProps>()
+
+const classObject = computed(() => ([defaultClass, {
+  primary: variant === "primary",
+  "primary-light": variant === "primary-light",
+  "primary-link": variant === "primary-link"
+}]))
 
 </script>
 
 <template>
-  <button :class="classObject" class="rounded py-1 px-2">
+  <button :class="classObject">
     <slot></slot>
   </button>
 </template>
@@ -32,6 +40,42 @@ const classObject = ref({
 
   &:disabled {
     opacity: 0.7;
+  }
+}
+
+.primary-light {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary-darker);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+
+  &:active {
+    background-color: var(--color-primary-darker);
+  }
+
+  &:disabled {
+    background-color: transparent;
+    color: var(--color-text-light);
+  }
+}
+
+.primary-link {
+  color: var(--color-primary-darker);
+
+  &:hover {
+    color: var(--color-primary-darker);
+  }
+
+  &:active {
+    text-decoration: underline;
+    color: var(--color-primary-darker);
+  }
+
+  &:disabled {
+    color: var(--color-text-light);
   }
 }
 </style>
